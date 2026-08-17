@@ -1,0 +1,46 @@
+:root{
+  --jf-bg:#0b0f19;
+  --jf-surface:#0f172a;
+  --jf-card:#0f172a;
+  --jf-primary:#38bdf8; /* skyblue */
+  --jf-primary-600:#0ea5ff;
+  --jf-accent:#10b981;
+  --jf-amber:#f59e0b;
+  --jf-text:#f8fafc;
+  --jf-muted:#94a3b8;
+  --jf-border: rgba(255,255,255,0.06);
+}
+
+/* Basic resets and utilities to harmonize with Bootstrap */
+html,body{height:100%;}
+body{background:var(--jf-bg);color:var(--jf-text);font-family: 'Plus Jakarta Sans', sans-serif;}
+
+.brand-logo img{height:48px}
+
+/* Buttons mapped to theme colors */
+.btn-jf-primary{background:var(--jf-primary);color:#fff;border-radius:8px;padding:10px 14px;border:none}
+.btn-jf-ghost{background:transparent;color:var(--jf-text);border:1px solid var(--jf-border);padding:8px 12px;border-radius:8px}
+
+/* Cards */
+.card-jf{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--jf-border);border-radius:12px;padding:18px}
+
+/* Accent helpers */
+.jf-accent{color:var(--jf-accent)}
+.jf-muted{color:var(--jf-muted)}
+
+/* Improve form elements contrast */
+input,select,textarea{background:transparent;border:1px solid var(--jf-border);color:var(--jf-text);padding:8px;border-radius:8px}
+
+/* Responsive tweaks for hero */
+.hero .display{color:var(--jf-text)}
+
+/* Small utility spacing */
+.sp-8{padding:8px}
+.mt-12{margin-top:12px}
+
+/* Make course cards lively */
+.course-card{transition:transform .25s ease, box-shadow .25s ease}
+.course-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.5)}
+
+/* Ensure images fit nicely */
+img{max-width:100%;height:auto}

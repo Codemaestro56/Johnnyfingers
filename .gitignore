@@ -1,0 +1,15 @@
+# XAMPP / Windows system files
+.DS_Store
+Thumbs.db
+
+# Database backups or configuration files with passwords
+config.local.php
+*.sql
+.env
+webhook/
+Vendor/
+stripe/
+stripe-php/
+README.md/
+
+

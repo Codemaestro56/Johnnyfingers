@@ -1,0 +1,3 @@
+Test file created by assistant
+Timestamp: 2026-08-17 00:00:00
+This file verifies that the server process can write into the assets/handouts directory.

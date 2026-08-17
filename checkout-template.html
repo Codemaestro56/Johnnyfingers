@@ -1,0 +1,61 @@
+<!-- Replace the Paystack inline script/button in checkout.php with this -->
+
+<div id="payment-element"><!-- Stripe mounts the card/payment UI here --></div>
+<button id="submit-btn" class="btn btn-primary" type="button">
+  <span id="btn-text">Pay <span id="amount-display"></span></span>
+  <span id="spinner" style="display:none;">Processing…</span>
+</button>
+<div id="payment-message" style="color:#f87171;margin-top:10px;"></div>
+
+<!-- Stripe's SDK, not a downloaded/self-hosted file -->
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  // Publishable key is public by design — safe to put in frontend JS.
+  // The SECRET key must never appear here; it stays server-side only.
+  const stripe = Stripe('pk_live_or_test_your_publishable_key_here');
+  let elements, clientSecret;
+
+  const courseCode = new URLSearchParams(window.location.search).get('course');
+
+  async function initialize() {
+    const res = await fetch(`create-payment-intent.php?course=${encodeURIComponent(courseCode)}`);
+    const data = await res.json();
+    if (data.error) {
+      document.getElementById('payment-message').textContent = data.error;
+      return;
+    }
+    clientSecret = data.clientSecret;
+    document.getElementById('amount-display').textContent =
+      '£' + Number(data.amount).toFixed(2);
+
+    elements = stripe.elements({ clientSecret });
+    const paymentElement = elements.create('payment'); // handles card + 3DS/SCA automatically
+    paymentElement.mount('#payment-element');
+  }
+
+  document.getElementById('submit-btn').addEventListener('click', async () => {
+    setLoading(true);
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        // Stripe redirects here after any 3D Secure challenge
+        return_url: `${window.location.origin}/payment-return.php`,
+      },
+    });
+
+    // Only reached if confirmation fails immediately (e.g. card declined
+    // before redirect). On success the browser navigates to return_url.
+    if (error) {
+      document.getElementById('payment-message').textContent = error.message;
+      setLoading(false);
+    }
+  });
+
+  function setLoading(isLoading) {
+    document.getElementById('submit-btn').disabled = isLoading;
+    document.getElementById('btn-text').style.display = isLoading ? 'none' : 'inline';
+    document.getElementById('spinner').style.display = isLoading ? 'inline' : 'none';
+  }
+
+  initialize();
+</script>

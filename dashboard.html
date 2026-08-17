@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard — Johnnyfingers</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .dashboard-layout {
+      padding: 40px 0 80px;
+      background: var(--bg-deep);
+      min-height: calc(100vh - 70px);
+    }
+
+    /* Welcome Banner */
+    .welcome-card {
+      background: linear-gradient(135deg, rgba(255, 106, 31, 0.15) 0%, rgba(20, 20, 22, 0.8) 100%);
+      border: 1px solid var(--line-soft);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      gap: 20px;
+    }
+
+    .welcome-text h1 {
+      font-size: 32px;
+      margin: 8px 0;
+    }
+
+    .welcome-text p {
+      color: var(--text-mute);
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .student-badge {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--line-soft);
+      padding: 12px 20px;
+      border-radius: 12px;
+      text-align: right;
+    }
+
+    /* Dashboard Layout Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Enrolled Course Cards */
+    .course-progress-card {
+      background: var(--panel);
+      border: 1px solid var(--line-soft);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      transition: border-color 0.2s ease;
+    }
+
+    .course-progress-card:hover {
+      border-color: var(--orange);
+    }
+
+    .course-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .course-card-header h3 {
+      font-size: 20px;
+      margin: 4px 0 0;
+    }
+
+    .course-tag {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(255, 106, 31, 0.15);
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    /* Progress Bar */
+    .progress-wrapper {
+      margin: 20px 0 16px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-mute);
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--orange);
+      border-radius: 10px;
+      transition: width 0.4s ease;
+    }
+
+    .course-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    /* Sidebar Cards */
+    .sidebar-widget {
+      background: var(--panel);
+      border: 1px solid var(--line-soft);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .workshop-item {
+      display: flex;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .workshop-item:last-child {
+      border-bottom: none;
+    }
+
+    .workshop-date {
+      background: rgba(255, 106, 31, 0.1);
+      border: 1px solid rgba(255, 106, 31, 0.2);
+      border-radius: 8px;
+      padding: 8px 12px;
+      text-align: center;
+      min-width: 60px;
+    }
+
+    .workshop-date .day {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--orange);
+      display: block;
+      line-height: 1;
+    }
+
+    .workshop-date .month {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .workshop-details h4 {
+      font-size: 14px;
+      margin: 0 0 4px;
+    }
+
+    .workshop-details p {
+      font-size: 12px;
+      color: var(--text-mute);
+      margin: 0;
+    }
+
+    @media (max-width: 860px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .welcome-card { flex-direction: column; text-align: center; }
+      .student-badge { text-align: center; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav-row">
+     <a href="Home.html" class="brand-logo" style="display: inline-flex; align-items: center; text-decoration: none;">
+  <img src="images/logo.png" alt="Johnny Fingers Logo" style="height: 45px; width: auto; object-fit: contain;">
+</a>
+    
+    
+    
+    <div class="nav-actions">
+      <span class="mono" style="font-size: 13px; color: var(--text-dim);">
+        <i class="fa-solid fa-user-circle"></i> John Doe
+      </span>
+      <a href="login.html" class="mono" style="font-size: 12px; color: var(--text-mute); margin-left: 16px;">
+        <i class="fa-solid fa-right-from-bracket"></i> Log Out
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="dashboard-layout">
+  <div class="container">
+    
+    <!-- Welcome Header -->
+    <div class="welcome-card">
+      <div class="welcome-text">
+        <span class="eyebrow-pill mono"><i class="fa-solid fa-bolt"></i> Student Portal</span>
+        <h1 class="display">Welcome back, John!</h1>
+        <p>You're making great progress. Continue where you left off or view your workshop schedule.</p>
+      </div>
+
+      <div class="student-badge">
+        <span class="mono" style="font-size: 11px; color: var(--text-mute); display: block;">STUDENT ID</span>
+        <strong class="mono" style="color: var(--orange); font-size: 14px;">#JF-88204</strong>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      
+      <!-- Main Content: Enrolled Courses -->
+      <section>
+        <h2 class="display section-title">
+          <i class="fa-solid fa-book-bookmark" style="color: var(--orange);"></i> My Training Tracks
+        </h2>
+
+        <!-- Active Course 1 -->
+        <div class="course-progress-card">
+          <div class="course-card-header">
+            <div>
+              <span class="course-tag mono">WM-01 • ONLINE + WORKSHOP</span>
+              <h3 class="display">Washing Machine Repair Track</h3>
+            </div>
+            <i class="fa-solid fa-soap" style="font-size: 24px; color: var(--orange);"></i>
+          </div>
+
+          <!-- Live Progress Bar -->
+          <div class="progress-wrapper">
+            <div class="progress-meta mono">
+              <span>Overall Progress</span>
+              <strong>50% Completed (3 of 6 Lessons)</strong>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width: 50%;"></div>
+            </div>
+          </div>
+
+          <div class="course-actions">
+            <span class="mono" style="font-size: 12px; color: var(--text-mute);">
+              Next up: <strong style="color: var(--text);">Day 4 — Control Board Testing</strong>
+            </span>
+            <a href="washing-machine.html" class="btn btn-primary" style="padding: 10px 18px; font-size: 13px;">
+              Continue Learning <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Completed Course 2 (Example showing 100% completion & Certificate unlocked) -->
+        <div class="course-progress-card">
+          <div class="course-card-header">
+            <div>
+              <span class="course-tag mono" style="background: rgba(46, 204, 113, 0.15); color: #2ecc71;">COMPLETED</span>
+              <h3 class="display">Dryer Repair Track</h3>
+            </div>
+            <i class="fa-solid fa-wind" style="font-size: 24px; color: #2ecc71;"></i>
+          </div>
+
+          <div class="progress-wrapper">
+            <div class="progress-meta mono">
+              <span>Overall Progress</span>
+              <strong style="color: #2ecc71;">100% Completed</strong>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width: 100%; background: #2ecc71;"></div>
+            </div>
+          </div>
+
+          <div class="course-actions">
+            <a href="#" class="btn btn-secondary" style="padding: 10px 18px; font-size: 13px; border-color: #2ecc71; color: #2ecc71;">
+              <i class="fa-solid fa-award"></i> Download Certificate (PDF)
+            </a>
+            <a href="dryer-repair.html" class="mono" style="font-size: 12px; color: var(--text-mute);">
+              Review Lessons <i class="fa-solid fa-chevron-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Available Track (Not Enrolled) -->
+        <div class="course-progress-card" style="opacity: 0.7; background: rgba(20, 20, 22, 0.5);">
+          <div class="course-card-header">
+            <div>
+              <span class="course-tag mono" style="background: rgba(255,255,255,0.08); color: var(--text-mute);">AVAILABLE TRACK</span>
+              <h3 class="display">Electric Cooker Repair Track</h3>
+            </div>
+            <i class="fa-solid fa-lock" style="font-size: 20px; color: var(--text-mute);"></i>
+          </div>
+          <p style="font-size: 13px; color: var(--text-mute); margin: 8px 0 16px;">
+            Unlock ceramic hob wiring, oven elements, and thermostat troubleshooting.
+          </p>
+          <div class="course-actions">
+            <span class="mono" style="font-size: 14px; color: var(--orange); font-weight: 600;">£299</span>
+            <a href="register.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 12px;">
+              Enrol Track <i class="fa-solid fa-plus"></i>
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Sidebar: Workshop Schedule & Support -->
+      <aside>
+        
+        <!-- Workshop Schedule Card -->
+        <div class="sidebar-widget">
+          <h3 class="display" style="font-size: 18px; margin-top: 0;">
+            <i class="fa-solid fa-calendar-days" style="color: var(--orange);"></i> Practical Workshops
+          </h3>
+          <p style="font-size: 12px; color: var(--text-mute); margin-bottom: 16px;">
+            Your booked 2-day hands-on bench sessions:
+          </p>
+
+          <div class="workshop-item">
+            <div class="workshop-date mono">
+              <span class="day">18</span>
+              <span class="month">SEP</span>
+            </div>
+            <div class="workshop-details">
+              <h4>Washing Machine Day 5 &amp; 6</h4>
+              <p><i class="fa-solid fa-location-dot"></i> London Training Lab</p>
+              <p><i class="fa-solid fa-clock"></i> 09:00 AM - 04:00 PM</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Instructor Support Widget -->
+        <div class="sidebar-widget" style="background: linear-gradient(180deg, var(--panel) 0%, rgba(255,106,31,0.05) 100%);">
+          <h3 class="display" style="font-size: 18px; margin-top: 0;">
+            <i class="fa-solid fa-headset" style="color: var(--orange);"></i> Instructor Support
+          </h3>
+          <p style="font-size: 13px; color: var(--text-mute); line-height: 1.5;">
+            Stuck on a lesson circuit diagram or need help before your workshop day?
+          </p>
+          <a href="mailto:support@johnnyfingers.com" class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 12px; margin-top: 8px;">
+            <i class="fa-solid fa-envelope"></i> Contact Instructor
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
