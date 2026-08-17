@@ -1,1 +1,2 @@
  <Files ".env"> Require all denied </Files>
+ DirectoryIndex Home.php index.php
